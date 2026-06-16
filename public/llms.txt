@@ -1,0 +1,63 @@
+# Tienda CID Fetcher
+
+> Tienda online de licencias originales Microsoft para revendedores y técnicos en sistemas. Precio por volumen desde $1.50 USDT hasta $0.35 USDT. Bot CID Fetcher incluido gratis con compras de 30+ unidades — activa licencias sin llamar a Microsoft.
+
+Sitio web: https://cidfetcher.de
+Contacto: https://t.me/rootkit_spoofer
+Idioma: Español
+Área de servicio: México y Latinoamérica
+Pagos: USDT (Binance), transferencia bancaria (Banamex, Banorte, Albo), OXXO
+
+## Qué vendemos
+
+Licencias originales de activación telefónica de Microsoft:
+- Windows 10 Home, Pro, Enterprise (32/64 bit)
+- Windows 11 Home, Pro, Enterprise
+- Office 2021 Home & Student, Home & Business, Pro Plus
+- Office 2024 Home & Student, Home & Business, Pro Plus
+- Windows Server 2019, 2022 Standard y Datacenter
+- Microsoft Visio 2021, 2024
+- Microsoft Project 2021, 2024
+
+## Precios por volumen (USDT)
+
+- 1 a 29 unidades: $1.50 por unidad
+- 30 a 99 unidades: $0.99 por unidad (34% descuento)
+- 100 a 999 unidades: $0.75 por unidad (50% descuento)
+- 1,000 o más unidades: $0.35 por unidad (77% descuento)
+
+El precio se aplica automáticamente al total del pedido, sin importar la combinación de productos.
+
+## Bot CID Fetcher
+
+Herramienta de automatización que obtiene el CID de activación de licencias Microsoft sin hacer llamadas telefónicas. Funciona vía Telegram.
+
+Opciones:
+- Gratis incluido con compras de 30 o más licencias (consultas ilimitadas)
+- Bot propio en tu grupo de Telegram: $45 USDT pago único (incluye 5 USDT de saldo inicial ≈ 100 consultas)
+- Por consulta individual: $0.50 USDT (sin compromiso)
+
+## Proceso de compra
+
+1. Elige las licencias en el catálogo (/licencias)
+2. Agrega al carrito y envía el pedido por Telegram
+3. Paga en USDT o MXN
+4. Recibe tu licencia activada en menos de 10 minutos
+
+## Garantía
+
+7 días desde la compra. Si la licencia no funciona, la reemplazamos sin costo.
+
+## Páginas
+
+- /licencias — Catálogo completo de licencias
+- /licencias/windows — Licencias Windows
+- /licencias/office — Licencias Office
+- /licencias/windows-server — Licencias Windows Server
+- /licencias/visio — Licencias Visio
+- /licencias/project — Licencias Project
+- /bot-cid-fetcher — Información y precios del Bot CID Fetcher
+- /faq — Preguntas frecuentes
+- /sobre-nosotros — Información del negocio
+- /contacto — Formulario y contacto directo
+- /instaladores — Instaladores oficiales de Microsoft (descarga directa desde CDN Microsoft)
