@@ -44,7 +44,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const title = categoryTitleMap[key] || `Licencias ${name} Originales`;
   return {
     title: `${title} - Tienda CID Fetcher`,
-    description: `Compra licencias originales Microsoft ${name} de activación telefónica. Precios desde $1.50 USDT por unidad, hasta 77% de descuento por volumen. Bot CID Fetcher gratis con 30+ unidades. Entrega inmediata.`,
+    description: `Compra licencias originales Microsoft ${name} de activación telefónica. Precios desde $2.50 USDT por unidad, hasta 80% de descuento por volumen. Bot CID Fetcher gratis con 30+ unidades. Entrega inmediata.`,
     alternates: {
       canonical: `https://cidfetcher.de/licencias/${categoria}`,
     },

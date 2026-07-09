@@ -13,7 +13,7 @@ import { FadeIn } from "@/components/fade-in";
 
 export const metadata: Metadata = {
   title: "Tienda CID Fetcher - Comprar Licencias Originales Microsoft",
-  description: "Licencias originales Windows, Office, Server, Visio, Project. Bot CID Fetcher gratis incluido. Activación inmediata. Precios por volumen desde $0.35 USDT.",
+  description: "Licencias originales Windows, Office, Server, Visio, Project. Bot CID Fetcher gratis incluido. Activación inmediata. Precios por volumen desde $0.50 USDT.",
 };
 
 const faqItems = [
@@ -73,7 +73,7 @@ export default async function HomePage() {
                 <span className="font-bold text-primary">para Revendedores</span>
               </h1>
               <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-2xl mx-auto text-balance">
-                Windows, Office, Server, Visio y Project — 100% originales. Desde <strong>$1.50 USDT</strong> por unidad, con descuentos por volumen hasta el 77%. El Bot CID Fetcher activa todo por ti, sin llamar a Microsoft.
+                Windows, Office, Server, Visio y Project — 100% originales. Desde <strong>$2.50 USDT</strong> por unidad, con descuentos por volumen hasta el 80%. El Bot CID Fetcher activa todo por ti, sin llamar a Microsoft.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link href="/licencias">

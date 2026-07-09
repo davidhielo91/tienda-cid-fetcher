@@ -123,7 +123,7 @@ export function LicenciasClient() {
             <div className="pt-4 border-t">
               <div className="rounded-lg bg-muted/50 p-3">
                 <p className="text-xs font-medium mb-1">Precio base</p>
-                <p className="text-sm font-bold">$1.50 USDT</p>
+                <p className="text-sm font-bold">$2.50 USDT</p>
                 <p className="text-[10px] text-muted-foreground mt-1 leading-relaxed">
                   Descuentos desde 30 unidades. Bot CID Fetcher gratis incluido.
                 </p>
