@@ -4,7 +4,7 @@ import { LicenciasClient } from "./licencias-client";
 
 export const metadata: Metadata = {
   title: "Catálogo de Licencias Microsoft Originales - Tienda CID Fetcher",
-  description: "Licencias originales Microsoft: Windows, Office 2021/2024, Windows Server, Visio y Project. Desde $1.50 USDT con hasta 77% de descuento por volumen. Bot CID Fetcher gratis incluido. Entrega inmediata.",
+  description: "Licencias originales Microsoft: Windows, Office 2021/2024, Windows Server, Visio y Project. Desde $2.50 USDT con hasta 80% de descuento por volumen. Bot CID Fetcher gratis incluido. Entrega inmediata.",
   alternates: {
     canonical: "https://cidfetcher.de/licencias",
   },

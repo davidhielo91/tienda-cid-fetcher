@@ -35,7 +35,7 @@ export const metadata: Metadata = {
   },
   title: "Tienda CID Fetcher - Licencias de Software Originales",
   description:
-    "Licencias originales Microsoft Windows, Office, Server, Visio y Project. Activación telefónica. Bot CID Fetcher gratis incluido. Pagos en USDT y MXN. Entrega inmediata. Precios por volumen desde $0.35 USDT.",
+    "Licencias originales Microsoft Windows, Office, Server, Visio y Project. Activación telefónica. Bot CID Fetcher gratis incluido. Pagos en USDT y MXN. Entrega inmediata. Precios por volumen desde $0.50 USDT.",
   metadataBase: new URL("https://cidfetcher.de"),
   alternates: {
     canonical: "https://cidfetcher.de",
