@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import { getProductBySlug, getProductsByCategory, getCategoryLabel } from "@/lib/data";
+import { getProductBySlug, getProductsByCategory, getCategoryLabel, products } from "@/lib/data";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -11,13 +11,19 @@ import { AddToCartForm } from "@/components/add-to-cart-form";
 import { CheckCircle2, Send } from "lucide-react";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { BreadcrumbSchema } from "@/components/breadcrumb-schema";
-import { PRICE_TIERS, getTierLabel, getPriceForQuantity } from "@/lib/pricing";
+import { PRICE_TIERS, getTierLabel, getPriceForQuantity, BASE_PRICE_USDT } from "@/lib/pricing";
 import { telegramUrl } from "@/lib/telegram";
 import { CopyLinkButton } from "@/components/copy-link-button";
 
 type PageProps = {
   params: Promise<{ slug: string }>;
 };
+
+export function generateStaticParams() {
+  return products
+    .filter((p) => p.isActive)
+    .map((p) => ({ slug: p.slug }));
+}
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
@@ -65,9 +71,11 @@ export default async function ProductoPage({ params }: PageProps) {
             brand: { "@type": "Brand", name: "Microsoft" },
             ...(product.imageUrl ? { image: `https://cidfetcher.de${product.imageUrl}` } : {}),
             offers: {
-              "@type": "Offer",
-              price: Number(product.priceUSDT).toFixed(2),
+              "@type": "AggregateOffer",
+              lowPrice: PRICE_TIERS[PRICE_TIERS.length - 1].price.toFixed(2),
+              highPrice: BASE_PRICE_USDT.toFixed(2),
               priceCurrency: "USD",
+              offerCount: PRICE_TIERS.length,
               availability: product.stock > 0 ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
               url: `https://cidfetcher.de/producto/${product.slug}`,
               seller: { "@type": "Organization", name: "Tienda CID Fetcher" },

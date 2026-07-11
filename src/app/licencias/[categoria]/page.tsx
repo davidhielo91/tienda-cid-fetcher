@@ -17,6 +17,10 @@ const slugToCategory: Record<string, string> = {
   project: "project",
 };
 
+export function generateStaticParams() {
+  return Object.keys(slugToCategory).map((categoria) => ({ categoria }));
+}
+
 interface PageProps {
   params: Promise<{ categoria: string }>;
 }

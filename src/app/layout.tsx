@@ -62,7 +62,7 @@ export default function RootLayout({
 }>) {
   return (
     <html
-      lang="es"
+      lang="es-MX"
       className={`${interSans.variable} ${jetbrainsMono.variable} h-full antialiased`}
       suppressHydrationWarning
     >
@@ -92,6 +92,7 @@ export default function RootLayout({
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "Organization",
+              "@id": "https://cidfetcher.de/#organization",
               name: "Tienda CID Fetcher",
               url: "https://cidfetcher.de",
               logo: {
