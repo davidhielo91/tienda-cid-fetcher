@@ -421,7 +421,7 @@ export default function BotCIDFetcherPage() {
               <Link href="/contacto" className="block w-full sm:w-auto">
                 <Button size="lg" variant="outline" className="w-full sm:w-auto gap-2">
                   <HeadphonesIcon className="h-5 w-5" />
-                  Enviar correo
+                  Otras formas de contacto
                 </Button>
               </Link>
             </div>

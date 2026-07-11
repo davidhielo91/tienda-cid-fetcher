@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { Package, Shield, Zap, HeadphonesIcon, Bot, Download, Users, CheckCircle, Clock, Headphones, Gift, ChevronDown, ChevronRight, ShoppingCart, Send } from "lucide-react";
+import { Shield, Zap, HeadphonesIcon, Bot, Download, Gift, ChevronDown, ChevronRight, ShoppingCart, Send } from "lucide-react";
 import { getFeaturedProducts } from "@/lib/data";
 import { PRICE_TIERS, getTierLabel, BASE_PRICE_USDT } from "@/lib/pricing";
 import { telegramUrl } from "@/lib/telegram";
@@ -13,7 +13,7 @@ import { FadeIn } from "@/components/fade-in";
 
 export const metadata: Metadata = {
   title: "Tienda CID Fetcher - Comprar Licencias Originales Microsoft",
-  description: "Licencias originales Windows, Office, Server, Visio, Project. Bot CID Fetcher gratis incluido. Activación inmediata. Precios por volumen desde $0.50 USDT.",
+  description: "Licencias originales Windows, Office, Server, Visio, Project. Bot CID Fetcher gratis incluido. Activación inmediata. Desde $2.50 USDT — hasta 80% de descuento por volumen.",
 };
 
 const faqItems = [
@@ -226,76 +226,6 @@ export default async function HomePage() {
               </Link>
             </FadeIn>
           </div>
-        </div>
-      </section>
-
-      <section className="py-16 bg-muted/40">
-        <div className="container mx-auto px-4">
-          <FadeIn delay={200}>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
-              {[
-                { icon: Users, value: "500+", label: "Revendedores Activos" },
-                { icon: CheckCircle, value: "1,000+", label: "Licencias Entregadas" },
-                { icon: Clock, value: "5+", label: "Años de Experiencia" },
-                { icon: Headphones, value: "7 días", label: "Garantía de Devolución" },
-              ].map((stat) => (
-                <FadeIn key={stat.label} delay={200}>
-                  <div className="text-center p-6 md:p-8 rounded-xl border bg-card shadow-sm">
-                    <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
-                      <stat.icon className="h-6 w-6 text-primary" />
-                    </div>
-                    <div className="text-3xl md:text-4xl font-bold text-primary mb-1">{stat.value}</div>
-                    <div className="text-sm text-muted-foreground/80">{stat.label}</div>
-                  </div>
-                </FadeIn>
-              ))}
-            </div>
-          </FadeIn>
-        </div>
-      </section>
-
-      <section className="py-16 bg-muted/30">
-        <div className="container mx-auto px-4">
-          <FadeIn delay={200}>
-            <div className="text-center mb-10">
-              <h2 className="text-2xl md:text-3xl font-bold mb-2">Lo que dicen quienes ya compran aquí</h2>
-              <p className="text-muted-foreground max-w-xl mx-auto">
-                Revendedores y técnicos que usan CID Fetcher a diario
-              </p>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
-              {[
-                {
-                  name: "Carlos M.",
-                  role: "Revendedor mayorista",
-                  text: "Compré 50 licencias y el Bot CID Fetcher me ha ahorrado horas de trabajo. La activación es instantánea, mis clientes reciben su licencia en minutos. Muy recomendados.",
-                },
-                {
-                  name: "Laura G.",
-                  role: "Técnico en sistemas",
-                  text: "Excelente servicio. Compré Office 2021 Pro Plus y Windows 11 Pro para varios clientes. Todo funcionó perfecto, la entrega fue inmediata por Telegram. Seguiré comprando.",
-                },
-                {
-                  name: "Roberto A.",
-                  role: "Dueño de cibercafé",
-                  text: "Necesitaba licencias para 15 equipos. Me ayudaron con la activación una por una por Telegram. Muy paciente el soporte. Precios justos, volveré por más.",
-                },
-              ].map((t) => (
-                <div key={t.name} className="p-6 rounded-xl border bg-card shadow-sm">
-                  <div className="flex items-center gap-4 mb-4">
-                    <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-sm font-bold text-primary shrink-0">
-                      {t.name.charAt(0)}
-                    </div>
-                    <div>
-                      <p className="text-sm font-semibold">{t.name}</p>
-                      <p className="text-xs text-muted-foreground">{t.role}</p>
-                    </div>
-                  </div>
-                  <p className="text-sm text-muted-foreground leading-relaxed">&ldquo;{t.text}&rdquo;</p>
-                </div>
-              ))}
-            </div>
-          </FadeIn>
         </div>
       </section>
 
