@@ -8,7 +8,7 @@ import { Breadcrumbs } from "@/components/breadcrumbs";
 import { FileText, Download, ExternalLink, Languages, Search, ChevronRight } from "lucide-react";
 import { Input } from "@/components/ui/input";
 
-type Installer = { name: string; desc: string; link: string };
+type Installer = { name: string; desc: string; link: string; format?: string };
 type Version = { version: string; items: Installer[] };
 
 const esInstallers: Version[] = [
@@ -43,6 +43,11 @@ const esInstallers: Version[] = [
     { name: "Project Pro", desc: "Project 2024 Professional", link: "https://officecdn.microsoft.com/db/492350F6-3A01-4F97-B9C0-C7C6DDF67D60/media/es-ES/ProjectPro2024Retail.img" },
     { name: "Visio Pro", desc: "Visio 2024 Professional", link: "https://officecdn.microsoft.com/db/492350F6-3A01-4F97-B9C0-C7C6DDF67D60/media/es-ES/VisioPro2024Retail.img" },
   ]},
+  { version: "Office 2024 LTSC", items: [
+    { name: "Office 2024 LTSC", desc: "Office 2024 LTSC Professional Plus x64 — Google Drive", link: "https://drive.google.com/file/d/1UvYCEMyhtNm07Lu8_ghvsxDQEW-82pIK/view?usp=sharing", format: ".zip" },
+    { name: "Project Pro 2024 LTSC", desc: "Project Professional 2024 LTSC x64 — Google Drive", link: "https://drive.google.com/file/d/1KcIu3miWT_0CNlmCoQIIZvTNEoIO7lXI/view?usp=sharing", format: ".zip" },
+    { name: "Visio Pro 2024 LTSC", desc: "Visio Professional 2024 LTSC x64 — Google Drive", link: "https://drive.google.com/file/d/1Lk0dQYAVQbFS51AssQntt1Pz_968j6AG/view?usp=sharing", format: ".zip" },
+  ]},
 ];
 
 const enInstallers: Version[] = [
@@ -76,6 +81,11 @@ const enInstallers: Version[] = [
     { name: "ProPlus", desc: "Office 2024 Professional Plus", link: "https://officecdn.microsoft.com/db/492350F6-3A01-4F97-B9C0-C7C6DDF67D60/media/en-US/ProPlus2024Retail.img" },
     { name: "Project Pro", desc: "Project 2024 Professional", link: "https://officecdn.microsoft.com/db/492350F6-3A01-4F97-B9C0-C7C6DDF67D60/media/en-US/ProjectPro2024Retail.img" },
     { name: "Visio Pro", desc: "Visio 2024 Professional", link: "https://officecdn.microsoft.com/db/492350F6-3A01-4F97-B9C0-C7C6DDF67D60/media/en-US/VisioPro2024Retail.img" },
+  ]},
+  { version: "Office 2024 LTSC", items: [
+    { name: "Office 2024 LTSC", desc: "Office 2024 LTSC Professional Plus x64 — Google Drive", link: "https://drive.google.com/file/d/1UvYCEMyhtNm07Lu8_ghvsxDQEW-82pIK/view?usp=sharing", format: ".zip" },
+    { name: "Project Pro 2024 LTSC", desc: "Project Professional 2024 LTSC x64 — Google Drive", link: "https://drive.google.com/file/d/1KcIu3miWT_0CNlmCoQIIZvTNEoIO7lXI/view?usp=sharing", format: ".zip" },
+    { name: "Visio Pro 2024 LTSC", desc: "Visio Professional 2024 LTSC x64 — Google Drive", link: "https://drive.google.com/file/d/1Lk0dQYAVQbFS51AssQntt1Pz_968j6AG/view?usp=sharing", format: ".zip" },
   ]},
 ];
 
@@ -204,7 +214,7 @@ export function OfficeClient() {
                           <CardDescription className="text-xs">{item.desc}</CardDescription>
                           <div className="mt-2">
                             <Badge variant="secondary" className="text-xs gap-1">
-                              <Download className="h-3 w-3" /> .img
+                              <Download className="h-3 w-3" /> {item.format ?? ".img"}
                             </Badge>
                           </div>
                         </CardContent>
@@ -218,7 +228,7 @@ export function OfficeClient() {
           <section className="p-6 rounded-xl bg-muted/30 border">
             <h3 className="font-semibold text-lg mb-2">Nota importante</h3>
             <p className="text-sm text-muted-foreground">
-              Los enlaces redirigen a los servidores oficiales de Microsoft CDN. No almacenamos ni distribuimos archivos ISO. Necesitas una licencia válida para activar el software después de la instalación.
+              La mayoría de los enlaces redirigen a los servidores oficiales de Microsoft CDN. Los instaladores de la categoría <strong>Office 2024 LTSC</strong> se alojan en Google Drive (.zip, x64). No almacenamos ni distribuimos archivos ISO propios. Necesitas una licencia válida para activar el software después de la instalación.
             </p>
           </section>
         </div>
