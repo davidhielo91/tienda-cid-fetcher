@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import { getProductsByCategory, getCategoryLabel } from "@/lib/data";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -24,7 +24,8 @@ const categoryKeys = ["windows", "office", "windows_server", "visio", "project"]
 
 export function LicenciasClient() {
   const pathname = usePathname();
-  const [searchQuery, setSearchQuery] = useState("");
+  const searchParams = useSearchParams();
+  const [searchQuery, setSearchQuery] = useState(searchParams.get("q") ?? "");
   const allProducts = useMemo(() => getProductsByCategory(), []);
 
   const filtered = useMemo(() => {
