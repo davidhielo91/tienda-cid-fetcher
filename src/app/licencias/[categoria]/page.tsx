@@ -66,7 +66,28 @@ export default async function CategoriaPage({ params }: PageProps) {
   const products = getProductsByCategory(categoryKey);
   const categoryName = getCategoryLabel(categoryKey);
 
+  const activeProducts = products.filter((p) => p.stock > 0);
+
   return (
+    <>
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{
+        __html: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "ItemList",
+          name: `Licencias ${categoryName} originales`,
+          url: `https://cidfetcher.de/licencias/${categoria}`,
+          numberOfItems: activeProducts.length,
+          itemListElement: activeProducts.map((p, i) => ({
+            "@type": "ListItem",
+            position: i + 1,
+            url: `https://cidfetcher.de/producto/${p.slug}`,
+            name: p.name,
+          })),
+        }),
+      }}
+    />
     <div className="container mx-auto px-4 py-8">
       <div className="mb-8">
         <Breadcrumbs items={[{ label: "Inicio", href: "/" }, { label: "Licencias", href: "/licencias" }, { label: categoryName }]} center />
@@ -125,5 +146,6 @@ export default async function CategoriaPage({ params }: PageProps) {
         </div>
       )}
     </div>
+    </>
   );
 }
