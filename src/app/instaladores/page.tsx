@@ -8,6 +8,9 @@ import { Monitor, FileText, ChevronRight, Download, Info } from "lucide-react";
 export const metadata: Metadata = {
   title: "Instaladores Oficiales Microsoft - Tienda CID Fetcher",
   description: "Descarga instaladores oficiales de Microsoft Windows y Office directamente desde el CDN de Microsoft. ISOs originales para Windows 10, Windows 11 y Office desde 2013 hasta 2024.",
+  alternates: {
+    canonical: "https://cidfetcher.de/instaladores",
+  },
 };
 
 const categories = [
