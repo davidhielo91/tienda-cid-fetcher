@@ -215,6 +215,19 @@
   background-size: 48px 48px;
 }
 
+@utility bg-dot {
+  background-image: radial-gradient(circle, var(--border) 1.5px, transparent 1.5px);
+  background-size: 24px 24px;
+}
+
+@utility bg-glow-top {
+  background: radial-gradient(ellipse 90% 60% at 50% -5%, oklch(0.445 0.232 264 / 0.18), transparent 70%);
+}
+
+.dark .bg-glow-top {
+  background: radial-gradient(ellipse 90% 60% at 50% -5%, oklch(0.68 0.185 258 / 0.12), transparent 70%);
+}
+
 @utility text-balance {
   text-wrap: balance;
 }
