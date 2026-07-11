@@ -7,7 +7,7 @@ export type ProductData = {
   category: string;
   description: string;
   shortDesc: string;
-  activationType: string;
+  activationType: "digital" | "physical" | "subscription";
   minQuantity: number;
   features: string[];
   imageUrl: string | null;
@@ -69,8 +69,8 @@ const rawProducts: RawProduct[] = [
 
 const SHORT_DESC = "Licencia de activación telefónica. Incluye clave de producto de 25 caracteres. La activación requiere nuestro Bot CID Fetcher o llamada a Microsoft — con el bot es inmediato y sin llamadas.";
 
-export const products: ProductData[] = rawProducts.map((p, i) => ({
-  id: `prod_${i + 1}`,
+export const products: ProductData[] = rawProducts.map((p) => ({
+  id: p.slug,
   name: p.name,
   slug: p.slug,
   category: p.category,

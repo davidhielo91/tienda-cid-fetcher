@@ -20,19 +20,36 @@ interface CartItem {
   minQuantity: number;
 }
 
+function isValidCartItem(x: unknown): x is CartItem {
+  return (
+    typeof x === "object" && x !== null &&
+    typeof (x as CartItem).productId === "string" &&
+    typeof (x as CartItem).quantity === "number" &&
+    typeof (x as CartItem).priceUSDT === "number" &&
+    !isNaN((x as CartItem).quantity) &&
+    !isNaN((x as CartItem).priceUSDT)
+  );
+}
+
 function getCart(): CartItem[] {
   if (typeof window === "undefined") return [];
   try {
     const data = localStorage.getItem("cart");
-    return data ? JSON.parse(data) : [];
+    if (!data) return [];
+    const raw: unknown = JSON.parse(data);
+    return Array.isArray(raw) ? raw.filter(isValidCartItem) : [];
   } catch {
     return [];
   }
 }
 
 function saveCart(items: CartItem[]) {
-  localStorage.setItem("cart", JSON.stringify(items));
-  window.dispatchEvent(new Event("cart-updated"));
+  try {
+    localStorage.setItem("cart", JSON.stringify(items));
+    window.dispatchEvent(new Event("cart-updated"));
+  } catch {
+    // QuotaExceededError or restricted context — UI stays consistent
+  }
 }
 
 export function CarritoClient() {
@@ -201,6 +218,7 @@ export function CarritoClient() {
                             id={`qty-${item.productId}`}
                             type="number"
                             min={item.minQuantity || 1}
+                            max={9999}
                             value={item.quantity}
                             onChange={(e) =>
                               updateQuantity(item.productId, parseInt(e.target.value) || 1)
