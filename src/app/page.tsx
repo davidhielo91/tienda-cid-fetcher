@@ -58,9 +58,13 @@ export default async function HomePage() {
   return (
     <div>
       <section className="relative py-28 md:py-40 overflow-hidden">
-        <div className="absolute inset-0 bg-grid opacity-[0.04]" />
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-primary/5 to-transparent" />
-        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-background to-transparent" />
+        <div className="absolute inset-0 bg-dot opacity-[0.07]" />
+        <div className="absolute inset-0 bg-glow-top" />
+        <div className="absolute -top-24 -left-24 w-96 h-96 rounded-full bg-primary/10 blur-3xl" />
+        <div className="absolute top-12 -right-24 w-80 h-80 rounded-full bg-accent-foreground/5 blur-3xl" />
+        <div className="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-background to-transparent" />
+        <div className="absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-background to-transparent" />
+        <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-background to-transparent" />
         <div className="container mx-auto px-4 relative">
           <FadeIn>
             <div className="max-w-3xl mx-auto text-center">
@@ -93,7 +97,8 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <section className="py-16 bg-muted/40">
+      <section className="py-16 bg-muted/40 relative overflow-hidden">
+        <div className="absolute -left-32 top-1/2 -translate-y-1/2 w-72 h-72 rounded-full bg-primary/10 blur-3xl pointer-events-none" />
         <div className="container mx-auto px-4">
           <FadeIn>
             <div className="text-center mb-10">
@@ -144,7 +149,7 @@ export default async function HomePage() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
               {steps.map((step, i) => (
                 <div key={step.title} className="text-center p-6">
-                  <div className="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center mx-auto mb-4">
+                  <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center mx-auto mb-4">
                     <step.icon className="h-7 w-7 text-primary" />
                   </div>
                   <div className="w-8 h-8 rounded-full bg-primary text-primary-foreground text-sm font-bold flex items-center justify-center mx-auto mb-3">
@@ -172,8 +177,8 @@ export default async function HomePage() {
                 { icon: HeadphonesIcon, title: "Soporte Real 24/7", desc: "Una persona real en Telegram, no un bot de respuestas. Respondemos en menos de 1 hora." },
                 { icon: Bot, title: "Bot CID Fetcher Gratis", desc: "Activa en segundos sin llamar a Microsoft. Incluido sin costo con compras de 30+ unidades." },
               ].map((item) => (
-                <div key={item.title} className="relative p-5 md:p-6 rounded-xl border bg-card shadow-sm">
-                  <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
+                <div key={item.title} className="relative p-5 md:p-6 rounded-xl border bg-card shadow-sm hover:shadow-md transition-all duration-200 hover:bg-gradient-to-br hover:from-primary/5 hover:to-transparent">
+                  <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center mb-4">
                     <item.icon className="h-5 w-5 text-primary" />
                   </div>
                   <h3 className="font-semibold mb-1">{item.title}</h3>
@@ -262,11 +267,14 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <section className="py-20 bg-muted/40">
-        <div className="container mx-auto px-4">
+      <section className="py-20 relative overflow-hidden bg-muted/30">
+        <div className="absolute inset-0 bg-dot opacity-[0.05]" />
+        <div className="absolute inset-0 bg-glow-top opacity-60" />
+        <div className="absolute -bottom-16 -right-16 w-80 h-80 rounded-full bg-primary/10 blur-3xl pointer-events-none" />
+        <div className="container mx-auto px-4 relative z-10">
           <FadeIn delay={300}>
             <div className="max-w-2xl mx-auto text-center">
-              <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center mx-auto mb-6">
+              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center mx-auto mb-6">
                 <Bot className="h-8 w-8 text-primary" />
               </div>
               <h2 className="text-3xl md:text-4xl font-bold mb-4">El bot que activa por ti — gratis con tu compra</h2>
