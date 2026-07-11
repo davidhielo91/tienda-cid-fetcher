@@ -92,6 +92,7 @@ export default function RootLayout({
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "Organization",
+              "@id": "https://cidfetcher.de/#organization",
               name: "Tienda CID Fetcher",
               url: "https://cidfetcher.de",
               logo: {

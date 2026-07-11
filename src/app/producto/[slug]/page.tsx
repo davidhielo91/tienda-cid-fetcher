@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import { getProductBySlug, getProductsByCategory, getCategoryLabel } from "@/lib/data";
+import { getProductBySlug, getProductsByCategory, getCategoryLabel, products } from "@/lib/data";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -18,6 +18,12 @@ import { CopyLinkButton } from "@/components/copy-link-button";
 type PageProps = {
   params: Promise<{ slug: string }>;
 };
+
+export function generateStaticParams() {
+  return products
+    .filter((p) => p.isActive)
+    .map((p) => ({ slug: p.slug }));
+}
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
