@@ -68,8 +68,8 @@ export default async function HomePage() {
         <div className="container mx-auto px-4 relative">
           <FadeIn>
             <div className="max-w-3xl mx-auto text-center">
-              <Badge variant="secondary" className="mb-6 text-sm px-4 py-1.5 gap-1.5">
-                <Gift className="h-4 w-4" />
+              <Badge variant="secondary" className="mb-6 text-sm px-4 py-1.5 gap-1.5 whitespace-normal sm:whitespace-nowrap max-w-[280px] sm:max-w-none">
+                <Gift className="h-4 w-4 shrink-0" />
                 Bot CID Fetcher gratis con compras de 30+ unidades
               </Badge>
               <h1 className="text-3xl sm:text-4xl md:text-7xl font-light tracking-tight mb-6 text-balance">
