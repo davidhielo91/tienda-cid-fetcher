@@ -273,27 +273,41 @@ export default async function HomePage() {
         <div className="absolute -bottom-16 -right-16 w-80 h-80 rounded-full bg-primary/10 blur-3xl pointer-events-none" />
         <div className="container mx-auto px-4 relative z-10">
           <FadeIn delay={300}>
-            <div className="max-w-2xl mx-auto text-center">
-              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center mx-auto mb-6">
-                <Bot className="h-8 w-8 text-primary" />
+            <div className="max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+              <div className="text-center lg:text-left">
+                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center mx-auto lg:mx-0 mb-6">
+                  <Bot className="h-8 w-8 text-primary" />
+                </div>
+                <h2 className="text-3xl md:text-4xl font-bold mb-4">El bot que activa por ti — gratis con tu compra</h2>
+                <p className="text-lg text-muted-foreground mb-8 max-w-xl mx-auto lg:mx-0">
+                  Olvídate de llamar a Microsoft. Con compras de 30+ unidades, el Bot CID Fetcher activa tus licencias al instante — sin costo adicional, sin límite de activaciones.
+                </p>
+                <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                  <Link href="/bot-cid-fetcher">
+                    <Button size="lg" className="gap-2 text-base px-8 shadow-lg shadow-primary/20">
+                      <Bot className="h-5 w-5" />
+                      Ver cómo funciona el Bot
+                    </Button>
+                  </Link>
+                  <Link href="/licencias">
+                    <Button size="lg" variant="outline" className="gap-2 text-base px-8">
+                      <Download className="h-5 w-5" />
+                      Ver licencias disponibles
+                    </Button>
+                  </Link>
+                </div>
               </div>
-              <h2 className="text-3xl md:text-4xl font-bold mb-4">El bot que activa por ti — gratis con tu compra</h2>
-              <p className="text-lg text-muted-foreground mb-8 max-w-xl mx-auto">
-                Olvídate de llamar a Microsoft. Con compras de 30+ unidades, el Bot CID Fetcher activa tus licencias al instante — sin costo adicional, sin límite de activaciones.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Link href="/bot-cid-fetcher">
-                  <Button size="lg" className="gap-2 text-base px-8 shadow-lg shadow-primary/20">
-                    <Bot className="h-5 w-5" />
-                    Ver cómo funciona el Bot
-                  </Button>
-                </Link>
-                <Link href="/licencias">
-                  <Button size="lg" variant="outline" className="gap-2 text-base px-8">
-                    <Download className="h-5 w-5" />
-                    Ver licencias disponibles
-                  </Button>
-                </Link>
+              <div className="flex justify-center lg:justify-end">
+                <div className="relative w-64 sm:w-72">
+                  <div className="absolute inset-0 bg-primary/10 blur-2xl rounded-full scale-110" />
+                  <Image
+                    src="/cid-fetcher-telegram.png"
+                    alt="Demo del Bot CID Fetcher activando una licencia en Telegram"
+                    width={320}
+                    height={600}
+                    className="relative rounded-3xl shadow-2xl w-full h-auto"
+                  />
+                </div>
               </div>
             </div>
           </FadeIn>
