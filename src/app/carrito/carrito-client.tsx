@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -8,77 +8,227 @@ import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { Trash2, ShoppingBag, ArrowLeft, Send, AlertTriangle } from "lucide-react";
 import { PRICE_TIERS, getTierLabel, getPriceForQuantity } from "@/lib/pricing";
-import { telegramUrl } from "@/lib/telegram";
+import {
+  createCheckoutOrder,
+  CART_STORAGE_KEY,
+  CHECKOUT_ORDER_STORAGE_KEY,
+  normalizeCart,
+  parseCheckoutOrder,
+  validateCart,
+  type CartItem,
+  type CheckoutOrder,
+} from "@/lib/checkout";
 
-interface CartItem {
-  id: string;
-  productId: string;
-  slug: string;
-  name: string;
-  priceUSDT: number;
-  quantity: number;
-  minQuantity: number;
-}
+type CartReadResult = ReturnType<typeof normalizeCart>;
+type StorageAction = "read" | "write" | "remove";
 
-function isValidCartItem(x: unknown): x is CartItem {
-  return (
-    typeof x === "object" && x !== null &&
-    typeof (x as CartItem).productId === "string" &&
-    typeof (x as CartItem).quantity === "number" &&
-    typeof (x as CartItem).priceUSDT === "number" &&
-    !isNaN((x as CartItem).quantity) &&
-    !isNaN((x as CartItem).priceUSDT)
-  );
-}
-
-function getCart(): CartItem[] {
-  if (typeof window === "undefined") return [];
+function removeCart(): string | null {
   try {
-    const data = localStorage.getItem("cart");
-    if (!data) return [];
-    const raw: unknown = JSON.parse(data);
-    return Array.isArray(raw) ? raw.filter(isValidCartItem) : [];
+    localStorage.removeItem(CART_STORAGE_KEY);
+    return null;
   } catch {
-    return [];
+    return "No se pudo limpiar el carrito guardado. Revisa los permisos de almacenamiento e inténtalo de nuevo.";
   }
 }
 
-function saveCart(items: CartItem[]) {
+function getCart(): CartReadResult & { storageError?: string } {
+  if (typeof window === "undefined") return { items: [], issues: [] };
+
+  let data: string | null;
   try {
-    localStorage.setItem("cart", JSON.stringify(items));
-    window.dispatchEvent(new Event("cart-updated"));
+    data = localStorage.getItem(CART_STORAGE_KEY);
   } catch {
-    // QuotaExceededError or restricted context — UI stays consistent
+    return {
+      items: [],
+      issues: [],
+      storageError: "No se pudo leer el carrito guardado. Revisa los permisos de almacenamiento e inténtalo de nuevo.",
+    };
+  }
+
+  if (!data) return { items: [], issues: [] };
+
+  try {
+    const raw: unknown = JSON.parse(data);
+    return normalizeCart(raw);
+  } catch {
+    return {
+      items: [],
+      issues: [{ index: -1, message: "El carrito guardado está dañado y no se pudo leer." }],
+    };
+  }
+}
+
+function saveCart(items: CartItem[], notify = true): string | null {
+  try {
+    localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(items));
+    if (notify) window.dispatchEvent(new Event("cart-updated"));
+    return null;
+  } catch {
+    return "No se pudo guardar el carrito. Revisa los permisos o el espacio disponible e inténtalo de nuevo.";
+  }
+}
+
+function getCheckoutDraft(): { order: CheckoutOrder | null; error?: string } {
+  try {
+    const data = sessionStorage.getItem(CHECKOUT_ORDER_STORAGE_KEY);
+    if (!data) return { order: null };
+
+    let order: CheckoutOrder | null = null;
+    try {
+      order = parseCheckoutOrder(JSON.parse(data));
+    } catch {
+      order = null;
+    }
+
+    if (order) return { order };
+
+    try {
+      sessionStorage.removeItem(CHECKOUT_ORDER_STORAGE_KEY);
+      return { order: null, error: "Se descartó un borrador de pedido inválido." };
+    } catch {
+      return {
+        order: null,
+        error: "No se pudo limpiar un borrador de pedido inválido. Cierra esta pestaña e inténtalo de nuevo.",
+      };
+    }
+  } catch {
+    return {
+      order: null,
+      error: "No se pudo leer el borrador de pedido. Revisa los permisos de almacenamiento e inténtalo de nuevo.",
+    };
+  }
+}
+
+function saveCheckoutDraft(order: CheckoutOrder): string | null {
+  try {
+    sessionStorage.setItem(CHECKOUT_ORDER_STORAGE_KEY, JSON.stringify(order));
+    return null;
+  } catch {
+    return "No se pudo guardar el borrador de pedido. No recargues la página y reintenta guardar antes de continuar.";
   }
 }
 
 export function CarritoClient() {
   const [cart, setCart] = useState<CartItem[]>([]);
   const [mounted, setMounted] = useState(false);
-  const [sent, setSent] = useState(false);
+  const [cartIssues, setCartIssues] = useState<string[]>([]);
+  const [checkoutOrder, setCheckoutOrder] = useState<CheckoutOrder | null>(null);
+  const [telegramOpened, setTelegramOpened] = useState(false);
+  const [checkoutError, setCheckoutError] = useState<string | null>(null);
+  const [storageError, setStorageError] = useState<string | null>(null);
+  const [storageAction, setStorageAction] = useState<StorageAction | null>(null);
+  const [checkoutStorageError, setCheckoutStorageError] = useState<string | null>(null);
+  const [checkoutDraftRestored, setCheckoutDraftRestored] = useState(false);
+  const checkoutOrderRef = useRef<CheckoutOrder | null>(null);
   const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
 
   useEffect(() => {
+    let cleanupTimer: number | undefined;
+
+    const loadCart = () => {
+      if (cleanupTimer !== undefined) window.clearTimeout(cleanupTimer);
+      const result = getCart();
+      setCart(result.items);
+      setCartIssues(result.issues.map((issue) => issue.message));
+      setStorageError(result.storageError ?? null);
+      setStorageAction(result.storageError ? "read" : null);
+
+      if (result.issues.length > 0) {
+        cleanupTimer = window.setTimeout(() => {
+          const failure = result.items.length > 0
+            ? saveCart(result.items, false)
+            : removeCart();
+          if (failure) {
+            setStorageError(failure);
+            setStorageAction(result.items.length > 0 ? "write" : "remove");
+          }
+        }, 0);
+      }
+    };
+
+    const handleCartChange = (event: Event) => {
+      if (event.type === "storage" && (event as StorageEvent).key !== null && (event as StorageEvent).key !== CART_STORAGE_KEY) {
+        return;
+      }
+      loadCart();
+    };
+
+    loadCart();
+    const mountedTimer = window.setTimeout(() => setMounted(true), 0);
+    window.addEventListener("cart-updated", handleCartChange);
+    window.addEventListener("storage", handleCartChange);
+
+    return () => {
+      if (cleanupTimer !== undefined) window.clearTimeout(cleanupTimer);
+      window.clearTimeout(mountedTimer);
+      window.removeEventListener("cart-updated", handleCartChange);
+      window.removeEventListener("storage", handleCartChange);
+    };
+  }, []);
+
+  useEffect(() => {
+    const draft = getCheckoutDraft();
     // eslint-disable-next-line react-hooks/set-state-in-effect
-    setCart(getCart());
-    setMounted(true);
+    setCheckoutStorageError(draft.error ?? null);
+    if (draft.order) {
+      checkoutOrderRef.current = draft.order;
+      setCheckoutOrder(draft.order);
+      setCheckoutDraftRestored(true);
+    }
   }, []);
 
   const updateQuantity = (productId: string, quantity: number) => {
+    const item = cart.find((cartItem) => cartItem.productId === productId);
+    if (!item) return;
+
+    const safeQuantity = Number.isSafeInteger(quantity) ? quantity : item.minQuantity;
     const updated = cart.map((item) =>
       item.productId === productId
-        ? { ...item, quantity: Math.max(item.minQuantity || 1, quantity) }
+        ? { ...item, quantity: Math.min(item.stock, Math.max(item.minQuantity, safeQuantity)) }
         : item
     );
+    const failure = saveCart(updated);
+    if (failure) {
+      setStorageError(failure);
+      setStorageAction("write");
+      return;
+    }
     setCart(updated);
-    saveCart(updated);
+    setCartIssues([]);
+    setCheckoutError(null);
+    setStorageError(null);
+    setStorageAction(null);
   };
 
   const removeItem = (productId: string) => {
     const updated = cart.filter((item) => item.productId !== productId);
+    const failure = updated.length === 0 ? removeCart() : saveCart(updated);
+    if (failure) {
+      setStorageError(failure);
+      setStorageAction(updated.length === 0 ? "remove" : "write");
+      return;
+    }
     setCart(updated);
-    saveCart(updated);
+    setCartIssues([]);
+    setCheckoutError(null);
+    setStorageError(null);
+    setStorageAction(null);
     setConfirmDeleteId(null);
+  };
+
+  const retryStorage = () => {
+    if (storageAction === "read") {
+      window.dispatchEvent(new Event("cart-updated"));
+      return;
+    }
+
+    const failure = storageAction === "remove" ? removeCart() : saveCart(cart);
+    if (failure) {
+      setStorageError(failure);
+      return;
+    }
+    setStorageError(null);
+    setStorageAction(null);
   };
 
   const totalQty = cart.reduce((sum, item) => sum + item.quantity, 0);
@@ -87,52 +237,89 @@ export function CarritoClient() {
 
   const activeTier = PRICE_TIERS.find((t) => totalQty >= t.min && totalQty <= t.max);
 
-  const telegramCheckout = () => {
-    const lines = cart.map((item) => {
-      const lineTotal = unitPrice * item.quantity;
-      return `• ${item.name} x${item.quantity} = $${lineTotal.toFixed(2)} USDT`;
-    });
-
-    let msg = `🛒 *Nuevo Pedido - Tienda CID Fetcher*\n\n`;
-    msg += `*Productos:*\n${lines.join("\n")}\n\n`;
-    msg += `*Precio por unidad:* $${unitPrice.toFixed(2)} USDT (${totalQty} unidades)\n`;
-    msg += `*Total: $${subtotalUSDT.toFixed(2)} USDT*`;
-    msg += `\n\n📍 Vengo de la web y quiero hacer este pedido.`;
-    msg += `\n\n— Enviado desde la web`;
-
-    window.open(telegramUrl(msg), "_blank");
-    setSent(true);
+  const openTelegram = (order: CheckoutOrder): boolean => {
+    try {
+      return window.open(order.url, "_blank", "noopener,noreferrer") !== null;
+    } catch {
+      return false;
+    }
   };
 
-  if (sent) {
+  const telegramCheckout = () => {
+    if (checkoutOrderRef.current) return;
+
+    const validation = validateCart(cart);
+    if (!validation.ok) {
+      setCheckoutError(validation.issues.join(" "));
+      return;
+    }
+
+    const order = createCheckoutOrder(validation.cart);
+    checkoutOrderRef.current = order;
+    setCheckoutOrder(order);
+    setCheckoutDraftRestored(false);
+    setCheckoutStorageError(saveCheckoutDraft(order));
+    setCheckoutError(null);
+    setTelegramOpened(openTelegram(order));
+  };
+
+  const retryTelegram = () => {
+    if (!checkoutOrder) return;
+    setTelegramOpened(openTelegram(checkoutOrder));
+  };
+
+  const retryCheckoutDraft = () => {
+    if (!checkoutOrder) return;
+    setCheckoutStorageError(saveCheckoutDraft(checkoutOrder));
+  };
+
+  if (checkoutOrder) {
     return (
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-md mx-auto text-center space-y-6">
           <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto">
             <Send className="h-8 w-8 text-primary" />
           </div>
-          <h1 className="text-2xl font-bold">¡Tu pedido está listo para enviar!</h1>
+          <h1 className="text-2xl font-bold">
+            {telegramOpened ? "Telegram está listo" : checkoutDraftRestored ? "Pedido listo para continuar" : "No pudimos abrir Telegram"}
+          </h1>
           <div className="space-y-3 text-muted-foreground">
             <p>
-              Abrimos <strong>Telegram</strong> con el resumen de tu pedido ya cargado.
+              {checkoutDraftRestored
+                ? "Restauramos tu pedido pendiente sin generar un nuevo ID."
+                : telegramOpened
+                ? "Abrimos Telegram con el resumen completo de tu pedido."
+                : "Tu navegador bloqueó la apertura automática de Telegram."}
             </p>
             <p className="text-sm">
-              Solo falta que hagas clic en <strong>Enviar</strong> dentro de Telegram para que lo recibamos.
+              Debes pulsar <strong>Enviar</strong> dentro de Telegram para que recibamos tu pedido.
             </p>
             <p className="text-sm">
-              Si Telegram no se abrió automáticamente, usá el botón de abajo.
+              El ID de pedido es <strong>{checkoutOrder.id}</strong>.
             </p>
+            {checkoutStorageError && (
+              <div className="space-y-2 rounded-lg border border-destructive/40 bg-destructive/5 p-3 text-left text-sm text-destructive" role="alert">
+                <p>{checkoutStorageError}</p>
+                <Button variant="outline" size="sm" onClick={retryCheckoutDraft}>
+                  Reintentar guardar el pedido
+                </Button>
+              </div>
+            )}
           </div>
           <div className="flex flex-col gap-3 pt-4">
+            <Button className="w-full gap-2" onClick={retryTelegram}>
+              <Send className="h-4 w-4" />
+              {telegramOpened ? "Reabrir Telegram con el pedido" : "Reintentar abrir Telegram"}
+            </Button>
             <a
-              href={telegramUrl()}
+              href={checkoutOrder.url}
               target="_blank"
               rel="noopener noreferrer"
-              aria-label="Ir a Telegram (se abre en nueva ventana)"
+              aria-label="Abrir Telegram con el pedido (se abre en nueva ventana)"
             >
-              <Button className="w-full gap-2">
+              <Button variant="outline" className="w-full gap-2">
                 <Send className="h-4 w-4" />
-                Abrir Telegram
+                Abrir enlace del pedido
               </Button>
             </a>
             <Link href="/licencias">
@@ -158,6 +345,19 @@ export function CarritoClient() {
 
   return (
     <div className="container mx-auto px-4 py-8">
+      {storageError && (
+        <div className="mb-6 flex flex-wrap items-center gap-3 rounded-lg border border-destructive/40 bg-destructive/5 p-3 text-sm text-destructive" role="alert">
+          <p className="flex-1">{storageError}</p>
+          <Button variant="outline" size="sm" onClick={retryStorage}>
+            Reintentar
+          </Button>
+        </div>
+      )}
+      {checkoutStorageError && (
+        <div className="mb-6 rounded-lg border border-destructive/40 bg-destructive/5 p-3 text-sm text-destructive" role="alert">
+          {checkoutStorageError}
+        </div>
+      )}
       <div className="mb-8">
         <h1 className="text-3xl font-bold tracking-tight">Carrito de Compras</h1>
         <p className="text-muted-foreground mt-2">
@@ -170,6 +370,11 @@ export function CarritoClient() {
       {cart.length === 0 ? (
         <div className="text-center py-16">
           <ShoppingBag className="mx-auto h-16 w-16 text-muted-foreground/40 mb-4" />
+          {cartIssues.length > 0 && (
+            <p className="text-sm text-destructive mb-6" role="alert">
+              {cartIssues.join(" ")} Los productos válidos se conservaron; los inválidos no se pueden usar.
+            </p>
+          )}
           <p className="text-muted-foreground mb-6">Agrega productos desde nuestro catálogo</p>
           <Link href="/licencias">
             <Button>Ver Catálogo</Button>
@@ -178,6 +383,11 @@ export function CarritoClient() {
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <h2 className="sr-only">Productos en tu carrito</h2>
+          {cartIssues.length > 0 && (
+            <p className="lg:col-span-3 text-sm text-destructive" role="alert">
+              {cartIssues.join(" ")} Los productos válidos se conservaron; los inválidos no se pueden usar.
+            </p>
+          )}
           <div className="lg:col-span-2 space-y-4">
             {cart.map((item) => (
               <Card key={item.productId}>
@@ -217,8 +427,8 @@ export function CarritoClient() {
                           <Input
                             id={`qty-${item.productId}`}
                             type="number"
-                            min={item.minQuantity || 1}
-                            max={9999}
+                            min={item.minQuantity}
+                            max={item.stock}
                             value={item.quantity}
                             onChange={(e) =>
                               updateQuantity(item.productId, parseInt(e.target.value) || 1)
@@ -285,9 +495,14 @@ export function CarritoClient() {
                   Al hacer clic te enviaremos un resumen de tu pedido por Telegram.
                   Un agente te responderá para coordinar el pago y la entrega.
                 </p>
+                {checkoutError && (
+                  <p className="text-sm text-destructive" role="alert">
+                    {checkoutError}
+                  </p>
+                )}
                 <Button className="w-full gap-2" size="lg" onClick={telegramCheckout}>
                   <Send className="h-5 w-5" />
-                  Pagar por Telegram
+                  Enviar pedido por Telegram
                 </Button>
                 <Link href="/licencias">
                   <Button variant="outline" className="w-full">

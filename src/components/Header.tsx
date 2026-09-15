@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { ThemeToggle } from "@/components/theme-toggle";
-import { ShoppingCart, Menu, Key, ChevronDown } from "lucide-react";
+import { ShoppingCart, Menu, Key, ChevronDown, AlertTriangle } from "lucide-react";
 
 const categories = [
   { name: "Windows", href: "/licencias/windows" },
@@ -25,6 +25,7 @@ const instItems = [
 export function Header() {
   const [open, setOpen] = useState(false);
   const [cartCount, setCartCount] = useState(0);
+  const [cartStorageError, setCartStorageError] = useState(false);
   const [licDropdown, setLicDropdown] = useState(false);
   const [instDropdown, setInstDropdown] = useState(false);
   const pathname = usePathname();
@@ -50,13 +51,22 @@ export function Header() {
         const data = localStorage.getItem("cart");
         const cart = data ? JSON.parse(data) : [];
         setCartCount(cart.reduce((sum: number, item: { quantity: number }) => sum + item.quantity, 0));
+        setCartStorageError(false);
       } catch {
         setCartCount(0);
+        setCartStorageError(true);
       }
     };
     updateCart();
     window.addEventListener("cart-updated", updateCart);
-    return () => window.removeEventListener("cart-updated", updateCart);
+    const updateCartFromStorage = (event: StorageEvent) => {
+      if (event.key === "cart" || event.key === null) updateCart();
+    };
+    window.addEventListener("storage", updateCartFromStorage);
+    return () => {
+      window.removeEventListener("cart-updated", updateCart);
+      window.removeEventListener("storage", updateCartFromStorage);
+    };
   }, []);
 
   const isActive = (href: string) => pathname === href || pathname.startsWith(href + "/");
@@ -222,6 +232,16 @@ export function Header() {
               </Badge>
             )}
           </Link>
+          {cartStorageError && (
+            <Link
+              href="/carrito"
+              className="text-destructive"
+              title="Revisar problema del almacenamiento del carrito"
+              aria-label="Revisar problema del almacenamiento del carrito"
+            >
+              <AlertTriangle className="h-4 w-4" />
+            </Link>
+          )}
 
           <Sheet open={open} onOpenChange={setOpen}>
             <SheetTrigger

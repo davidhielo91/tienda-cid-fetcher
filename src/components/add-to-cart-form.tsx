@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Minus, Plus, ShoppingCart } from "lucide-react";
+import { CART_STORAGE_KEY, normalizeCart, type CartItem } from "@/lib/checkout";
 
 interface AddToCartFormProps {
   productId: string;
@@ -23,38 +24,65 @@ export function AddToCartForm({
 }: AddToCartFormProps) {
   const [quantity, setQuantity] = useState(minQuantity);
   const [added, setAdded] = useState(false);
+  const [storageError, setStorageError] = useState<string | null>(null);
 
   const addToCart = () => {
     if (added) return;
+    let existing: string | null;
     try {
-      const existing = localStorage.getItem("cart");
-      const cart = existing ? JSON.parse(existing) : [];
-
-      const existingIndex = cart.findIndex(
-        (item: { productId: string }) => item.productId === productId
-      );
-
-      if (existingIndex >= 0) {
-        cart[existingIndex].quantity += quantity;
-      } else {
-        cart.push({
-          id: typeof crypto?.randomUUID === "function" ? crypto.randomUUID() : `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
-          productId,
-          slug: productSlug,
-          name,
-          priceUSDT,
-          quantity,
-          minQuantity,
-        });
-      }
-
-      localStorage.setItem("cart", JSON.stringify(cart));
-      window.dispatchEvent(new Event("cart-updated"));
-      setAdded(true);
-      setTimeout(() => setAdded(false), 3000);
+      existing = localStorage.getItem(CART_STORAGE_KEY);
     } catch {
-      localStorage.removeItem("cart");
+      setStorageError("No se pudo leer el carrito. Revisa los permisos de almacenamiento e inténtalo de nuevo.");
+      return;
     }
+
+    let normalized;
+    try {
+      normalized = normalizeCart(existing ? JSON.parse(existing) : []);
+    } catch {
+      setStorageError("El carrito guardado está dañado. Abre el carrito para revisar los datos antes de agregar productos.");
+      return;
+    }
+
+    if (normalized.issues.length > 0) {
+      setStorageError(`${normalized.issues.map((issue) => issue.message).join(" ")} Abre el carrito para revisar los datos.`);
+      return;
+    }
+
+    const cart: Array<Partial<CartItem> & { productId: string; quantity: number }> = normalized.items.map((item) => ({ ...item }));
+    const existingIndex = cart.findIndex((item) => item.productId === productId);
+
+    if (existingIndex >= 0) {
+      const currentItem = cart[existingIndex];
+      const nextQuantity = currentItem.quantity + quantity;
+      if (currentItem.stock !== undefined && nextQuantity > currentItem.stock) {
+        setStorageError(`La cantidad solicitada supera el stock disponible para ${name}.`);
+        return;
+      }
+      currentItem.quantity = nextQuantity;
+    } else {
+      cart.push({
+        id: typeof crypto?.randomUUID === "function" ? crypto.randomUUID() : `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+        productId,
+        slug: productSlug,
+        name,
+        priceUSDT,
+        quantity,
+        minQuantity,
+      });
+    }
+
+    try {
+      localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart));
+      window.dispatchEvent(new Event("cart-updated"));
+    } catch {
+      setStorageError("No se pudo guardar el carrito. Revisa los permisos o el espacio disponible e inténtalo de nuevo.");
+      return;
+    }
+
+    setStorageError(null);
+    setAdded(true);
+    setTimeout(() => setAdded(false), 3000);
   };
 
   return (
@@ -104,6 +132,16 @@ export function AddToCartForm({
           </>
         )}
       </Button>
+      {storageError && (
+        <div className="space-y-2 rounded-lg border border-destructive/40 bg-destructive/5 p-3 text-sm text-destructive" role="alert">
+          <p>{storageError}</p>
+          <Link href="/carrito" className="block">
+            <Button variant="outline" className="w-full" size="sm">
+              Abrir carrito
+            </Button>
+          </Link>
+        </div>
+      )}
       {added && (
         <Link href="/carrito" className="block">
           <Button variant="outline" className="w-full" size="sm">

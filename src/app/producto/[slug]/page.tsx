@@ -5,13 +5,13 @@ import Link from "next/link";
 import { getProductBySlug, getProductsByCategory, getCategoryLabel, products } from "@/lib/data";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { AddToCartForm } from "@/components/add-to-cart-form";
 import { CheckCircle2, Send } from "lucide-react";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { BreadcrumbSchema } from "@/components/breadcrumb-schema";
-import { PRICE_TIERS, getTierLabel, getPriceForQuantity, BASE_PRICE_USDT } from "@/lib/pricing";
+import { PRICE_TIERS, getTierLabel, BASE_PRICE_USDT } from "@/lib/pricing";
 import { telegramUrl } from "@/lib/telegram";
 import { CopyLinkButton } from "@/components/copy-link-button";
 

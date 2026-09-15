@@ -6,20 +6,20 @@ E-commerce para reventa de licencias originales Microsoft. Sin backend — todo 
 
 | Área | Tecnología |
 |---|---|
-| Framework | Next.js 16.2.6 (App Router) |
-| UI | React 19, Tailwind CSS v4, shadcn/ui (base-ui) |
+| Framework | Next.js 16.3.5 (App Router) |
+| UI | React 19.2.4, Tailwind CSS v4, shadcn/ui (base-ui) |
 | Lenguaje | TypeScript 5 |
 | Fuentes | Inter (sans), JetBrains Mono |
 | Íconos | lucide-react |
-| Tests | Vitest (lógica de precios) |
+| Tests | Vitest (lógica de precios y checkout) |
 | Linting | ESLint (eslint-config-next) |
-| Deploy | Docker standalone en EasyPanel / Vercel |
+| Deploy | Cloudflare Workers sirviendo assets estáticos |
 
 ## Arquitectura
 
 - **Sin backend** — sin API routes, sin base de datos
 - **Productos** hardcodeados en `src/lib/data.ts`
-- **Precios por volumen** en `src/lib/pricing.ts` (4 tiers)
+- **Precios por volumen** en `src/lib/pricing.ts` (5 tiers)
 - **Carrito** persistido en `localStorage`
 - **Checkout** = deep link a Telegram con el resumen del pedido
 
@@ -27,8 +27,8 @@ E-commerce para reventa de licencias originales Microsoft. Sin backend — todo 
 
 ```bash
 npm run dev          # dev server (puerto 3000)
-npm run build        # build de producción (standalone)
-npm test             # tests de Vitest (pricing)
+npm run build        # build de producción
+npm test             # tests de Vitest (pricing y checkout)
 npx tsc --noEmit     # solo type check
 npm run lint         # ESLint
 ```
@@ -41,5 +41,5 @@ NEXT_PUBLIC_TELEGRAM_USERNAME=rootkit_spoofer
 
 ## Ramas
 
-- `master` — producción (Vercel)
-- `v2` — desarrollo activo
+- `main` — producción (Cloudflare Workers)
+- Ramas `feature/*` — desarrollo de cambios
