@@ -1,6 +1,6 @@
 import { ImageResponse } from "next/og";
 
-export const runtime = "edge";
+export const dynamic = "force-static";
 export const alt = "Tienda CID Fetcher — Licencias Microsoft para Revendedores";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
@@ -52,6 +52,8 @@ export default function Image() {
             textAlign: "center",
             lineHeight: 1.1,
             marginBottom: "24px",
+            display: "flex",
+            flexDirection: "column",
           }}
         >
           Licencias Microsoft

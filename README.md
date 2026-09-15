@@ -33,6 +33,31 @@ npx tsc --noEmit     # solo type check
 npm run lint         # ESLint
 ```
 
+## Despliegue en Cloudflare
+
+La producción usa Cloudflare Workers Static Assets. `npm run build` genera la exportación estática en `out/`. `wrangler.jsonc` publica ese directorio mediante el Worker `tienda-cid-fetcher`, con el binding `ASSETS`.
+
+`src/worker.ts` envía las solicitudes normales a `ASSETS`. También corrige únicamente las solicitudes RSC de Next.js cuyo nombre usa el formato punteado, por ejemplo `/carrito/__next.carrito.__PAGE__.txt`, hacia el asset anidado `/carrito/__next.carrito/__PAGE__.txt`. La cadena de consulta, método, headers y body se conservan.
+
+Antes de publicar:
+
+```powershell
+npm ci
+npm run lint
+npm test
+npm run build
+git diff --check
+npx wrangler deploy --config wrangler.jsonc --dry-run --strict
+```
+
+Publica después de revisar el dry run:
+
+```powershell
+npx wrangler deploy --config wrangler.jsonc
+```
+
+Los headers de seguridad viven en `public/_headers` para que formen parte de la exportación estática. No guardar tokens ni secretos en el repositorio.
+
 ## Variables de entorno
 
 ```env
