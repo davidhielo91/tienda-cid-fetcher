@@ -1,10 +1,11 @@
-export const BASE_PRICE_USDT = 1.5;
+export const BASE_PRICE_USDT = 2.5;
 
 export const PRICE_TIERS = [
-  { min: 1, max: 29, price: 1.5 },
-  { min: 30, max: 99, price: 0.99 },
-  { min: 100, max: 999, price: 0.75 },
-  { min: 1000, max: Infinity, price: 0.35 },
+  { min: 1, max: 29, price: 2.5 },
+  { min: 30, max: 99, price: 1.5 },
+  { min: 100, max: 499, price: 0.99 },
+  { min: 500, max: 999, price: 0.75 },
+  { min: 1000, max: Infinity, price: 0.5 },
 ] as const;
 
 export function getPriceForQuantity(qty: number): number {

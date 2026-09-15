@@ -20,19 +20,36 @@ interface CartItem {
   minQuantity: number;
 }
 
+function isValidCartItem(x: unknown): x is CartItem {
+  return (
+    typeof x === "object" && x !== null &&
+    typeof (x as CartItem).productId === "string" &&
+    typeof (x as CartItem).quantity === "number" &&
+    typeof (x as CartItem).priceUSDT === "number" &&
+    !isNaN((x as CartItem).quantity) &&
+    !isNaN((x as CartItem).priceUSDT)
+  );
+}
+
 function getCart(): CartItem[] {
   if (typeof window === "undefined") return [];
   try {
     const data = localStorage.getItem("cart");
-    return data ? JSON.parse(data) : [];
+    if (!data) return [];
+    const raw: unknown = JSON.parse(data);
+    return Array.isArray(raw) ? raw.filter(isValidCartItem) : [];
   } catch {
     return [];
   }
 }
 
 function saveCart(items: CartItem[]) {
-  localStorage.setItem("cart", JSON.stringify(items));
-  window.dispatchEvent(new Event("cart-updated"));
+  try {
+    localStorage.setItem("cart", JSON.stringify(items));
+    window.dispatchEvent(new Event("cart-updated"));
+  } catch {
+    // QuotaExceededError or restricted context — UI stays consistent
+  }
 }
 
 export function CarritoClient() {
@@ -91,13 +108,20 @@ export function CarritoClient() {
     return (
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-md mx-auto text-center space-y-6">
-          <div className="w-16 h-16 rounded-full bg-success/10 flex items-center justify-center mx-auto">
-            <Send className="h-8 w-8 text-success" />
+          <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto">
+            <Send className="h-8 w-8 text-primary" />
           </div>
-          <h1 className="text-2xl font-bold">¡Pedido Enviado!</h1>
-          <div className="space-y-2 text-muted-foreground">
-            <p>Te hemos enviado los detalles por <strong>Telegram</strong>.</p>
-            <p className="text-sm">Si no se abrió Telegram automáticamente, haz clic en el botón de abajo.</p>
+          <h1 className="text-2xl font-bold">¡Tu pedido está listo para enviar!</h1>
+          <div className="space-y-3 text-muted-foreground">
+            <p>
+              Abrimos <strong>Telegram</strong> con el resumen de tu pedido ya cargado.
+            </p>
+            <p className="text-sm">
+              Solo falta que hagas clic en <strong>Enviar</strong> dentro de Telegram para que lo recibamos.
+            </p>
+            <p className="text-sm">
+              Si Telegram no se abrió automáticamente, usá el botón de abajo.
+            </p>
           </div>
           <div className="flex flex-col gap-3 pt-4">
             <a
@@ -108,7 +132,7 @@ export function CarritoClient() {
             >
               <Button className="w-full gap-2">
                 <Send className="h-4 w-4" />
-                Abrir Telegram de nuevo
+                Abrir Telegram
               </Button>
             </a>
             <Link href="/licencias">
@@ -194,6 +218,7 @@ export function CarritoClient() {
                             id={`qty-${item.productId}`}
                             type="number"
                             min={item.minQuantity || 1}
+                            max={9999}
                             value={item.quantity}
                             onChange={(e) =>
                               updateQuantity(item.productId, parseInt(e.target.value) || 1)

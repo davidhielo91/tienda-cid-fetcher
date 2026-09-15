@@ -1,6 +1,6 @@
 # Tienda CID Fetcher
 
-> Tienda online de licencias originales Microsoft para revendedores y técnicos en sistemas. Precio por volumen desde $1.50 USDT hasta $0.35 USDT. Bot CID Fetcher incluido gratis con compras de 30+ unidades — activa licencias sin llamar a Microsoft.
+> Tienda online de licencias originales Microsoft para revendedores y técnicos en sistemas. Precio por volumen desde $2.50 USDT hasta $0.50 USDT. Bot CID Fetcher incluido gratis con compras de 30+ unidades — activa licencias sin llamar a Microsoft.
 
 Sitio web: https://cidfetcher.de
 Contacto: https://t.me/rootkit_spoofer
@@ -21,10 +21,11 @@ Licencias originales de activación telefónica de Microsoft:
 
 ## Precios por volumen (USDT)
 
-- 1 a 29 unidades: $1.50 por unidad
-- 30 a 99 unidades: $0.99 por unidad (34% descuento)
-- 100 a 999 unidades: $0.75 por unidad (50% descuento)
-- 1,000 o más unidades: $0.35 por unidad (77% descuento)
+- 1 a 29 unidades: $2.50 por unidad
+- 30 a 99 unidades: $1.50 por unidad (40% descuento)
+- 100 a 499 unidades: $0.99 por unidad (60% descuento)
+- 500 a 999 unidades: $0.75 por unidad (70% descuento)
+- 1,000 o más unidades: $0.50 por unidad (80% descuento)
 
 El precio se aplica automáticamente al total del pedido, sin importar la combinación de productos.
 
@@ -59,5 +60,5 @@ Opciones:
 - /bot-cid-fetcher — Información y precios del Bot CID Fetcher
 - /faq — Preguntas frecuentes
 - /sobre-nosotros — Información del negocio
-- /contacto — Formulario y contacto directo
+- /contacto — Contacto directo por Telegram y correo electrónico
 - /instaladores — Instaladores oficiales de Microsoft (descarga directa desde CDN Microsoft)

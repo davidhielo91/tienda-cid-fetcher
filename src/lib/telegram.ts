@@ -1,4 +1,4 @@
-const TELEGRAM_USERNAME = "rootkit_spoofer";
+const TELEGRAM_USERNAME = process.env.NEXT_PUBLIC_TELEGRAM_USERNAME ?? "rootkit_spoofer";
 
 const defaultMessage = encodeURIComponent(
   "¡Hola! Vengo de la web de Tienda CID Fetcher y me gustaría recibir información. ¿Me puedes ayudar?"

@@ -78,8 +78,8 @@ export default function Image() {
           }}
         >
           {[
-            { value: "Desde $1.50 USDT", label: "precio unitario" },
-            { value: "Hasta 77%", label: "descuento por volumen" },
+            { value: "Desde $2.50 USDT", label: "precio unitario" },
+            { value: "Hasta 80%", label: "descuento por volumen" },
             { value: "Entrega inmediata", label: "sin esperas" },
           ].map((stat) => (
             <div

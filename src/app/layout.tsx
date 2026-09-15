@@ -35,7 +35,7 @@ export const metadata: Metadata = {
   },
   title: "Tienda CID Fetcher - Licencias de Software Originales",
   description:
-    "Licencias originales Microsoft Windows, Office, Server, Visio y Project. Activación telefónica. Bot CID Fetcher gratis incluido. Pagos en USDT y MXN. Entrega inmediata. Precios por volumen desde $0.35 USDT.",
+    "Licencias originales Microsoft Windows, Office, Server, Visio y Project. Activación telefónica. Bot CID Fetcher gratis incluido. Pagos en USDT y MXN. Desde $2.50 USDT — hasta 80% de descuento por volumen.",
   metadataBase: new URL("https://cidfetcher.de"),
   alternates: {
     canonical: "https://cidfetcher.de",
@@ -62,7 +62,7 @@ export default function RootLayout({
 }>) {
   return (
     <html
-      lang="es"
+      lang="es-MX"
       className={`${interSans.variable} ${jetbrainsMono.variable} h-full antialiased`}
       suppressHydrationWarning
     >
@@ -92,6 +92,7 @@ export default function RootLayout({
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "Organization",
+              "@id": "https://cidfetcher.de/#organization",
               name: "Tienda CID Fetcher",
               url: "https://cidfetcher.de",
               logo: {

@@ -2,36 +2,44 @@ import { describe, it, expect } from "vitest";
 import { getPriceForQuantity, getTierLabel, BASE_PRICE_USDT, PRICE_TIERS } from "./pricing";
 
 describe("getPriceForQuantity", () => {
-  it("returns $1.50 for 1 unit", () => {
-    expect(getPriceForQuantity(1)).toBe(1.5);
+  it("returns $2.50 for 1 unit", () => {
+    expect(getPriceForQuantity(1)).toBe(2.5);
   });
 
-  it("returns $1.50 for 29 units (tier boundary)", () => {
-    expect(getPriceForQuantity(29)).toBe(1.5);
+  it("returns $2.50 for 29 units (tier boundary)", () => {
+    expect(getPriceForQuantity(29)).toBe(2.5);
   });
 
-  it("returns $0.99 for 30 units (volume tier start)", () => {
-    expect(getPriceForQuantity(30)).toBe(0.99);
+  it("returns $1.50 for 30 units (volume tier start)", () => {
+    expect(getPriceForQuantity(30)).toBe(1.5);
   });
 
-  it("returns $0.99 for 99 units (tier boundary)", () => {
-    expect(getPriceForQuantity(99)).toBe(0.99);
+  it("returns $1.50 for 99 units (tier boundary)", () => {
+    expect(getPriceForQuantity(99)).toBe(1.5);
   });
 
-  it("returns $0.75 for 100 units", () => {
-    expect(getPriceForQuantity(100)).toBe(0.75);
+  it("returns $0.99 for 100 units", () => {
+    expect(getPriceForQuantity(100)).toBe(0.99);
+  });
+
+  it("returns $0.99 for 499 units (tier boundary)", () => {
+    expect(getPriceForQuantity(499)).toBe(0.99);
+  });
+
+  it("returns $0.75 for 500 units", () => {
+    expect(getPriceForQuantity(500)).toBe(0.75);
   });
 
   it("returns $0.75 for 999 units (tier boundary)", () => {
     expect(getPriceForQuantity(999)).toBe(0.75);
   });
 
-  it("returns $0.35 for 1000 units", () => {
-    expect(getPriceForQuantity(1000)).toBe(0.35);
+  it("returns $0.50 for 1000 units", () => {
+    expect(getPriceForQuantity(1000)).toBe(0.5);
   });
 
-  it("returns $0.35 for large quantities", () => {
-    expect(getPriceForQuantity(50000)).toBe(0.35);
+  it("returns $0.50 for large quantities", () => {
+    expect(getPriceForQuantity(50000)).toBe(0.5);
   });
 
   it("falls back to BASE_PRICE_USDT for 0 quantity", () => {
@@ -46,7 +54,8 @@ describe("getTierLabel", () => {
 
   it("labels mid tiers with range", () => {
     expect(getTierLabel(30, 99)).toBe("30–99 unidades");
-    expect(getTierLabel(100, 999)).toBe("100–999 unidades");
+    expect(getTierLabel(100, 499)).toBe("100–499 unidades");
+    expect(getTierLabel(500, 999)).toBe("500–999 unidades");
   });
 
   it("labels the last tier with + suffix", () => {

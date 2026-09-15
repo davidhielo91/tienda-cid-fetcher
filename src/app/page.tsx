@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { Package, Shield, Zap, HeadphonesIcon, Bot, Download, Users, CheckCircle, Clock, Headphones, Gift, ChevronDown, ChevronRight, ShoppingCart, Send } from "lucide-react";
+import { Shield, Zap, HeadphonesIcon, Bot, Download, Gift, ChevronDown, ChevronRight, ShoppingCart, Send } from "lucide-react";
 import { getFeaturedProducts } from "@/lib/data";
 import { PRICE_TIERS, getTierLabel, BASE_PRICE_USDT } from "@/lib/pricing";
 import { telegramUrl } from "@/lib/telegram";
@@ -13,7 +13,7 @@ import { FadeIn } from "@/components/fade-in";
 
 export const metadata: Metadata = {
   title: "Tienda CID Fetcher - Comprar Licencias Originales Microsoft",
-  description: "Licencias originales Windows, Office, Server, Visio, Project. Bot CID Fetcher gratis incluido. Activación inmediata. Precios por volumen desde $0.35 USDT.",
+  description: "Licencias originales Windows, Office, Server, Visio, Project. Bot CID Fetcher gratis incluido. Activación inmediata. Desde $2.50 USDT — hasta 80% de descuento por volumen.",
 };
 
 const faqItems = [
@@ -58,22 +58,26 @@ export default async function HomePage() {
   return (
     <div>
       <section className="relative py-28 md:py-40 overflow-hidden">
-        <div className="absolute inset-0 bg-grid opacity-[0.04]" />
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-primary/5 to-transparent" />
-        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-background to-transparent" />
+        <div className="absolute inset-0 bg-dot opacity-[0.07]" />
+        <div className="absolute inset-0 bg-glow-top" />
+        <div className="absolute -top-24 -left-24 w-96 h-96 rounded-full bg-primary/10 blur-3xl" />
+        <div className="absolute top-12 -right-24 w-80 h-80 rounded-full bg-accent-foreground/5 blur-3xl" />
+        <div className="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-background to-transparent" />
+        <div className="absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-background to-transparent" />
+        <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-background to-transparent" />
         <div className="container mx-auto px-4 relative">
           <FadeIn>
             <div className="max-w-3xl mx-auto text-center">
               <Badge variant="secondary" className="mb-6 text-sm px-4 py-1.5 gap-1.5">
                 <Gift className="h-4 w-4" />
-                Bot CID Fetcher gratis con compras de 30+ unidades
+                Bot gratis · 30+ unidades
               </Badge>
               <h1 className="text-3xl sm:text-4xl md:text-7xl font-light tracking-tight mb-6 text-balance">
                 Licencias Microsoft{" "}
                 <span className="font-bold text-primary">para Revendedores</span>
               </h1>
               <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-2xl mx-auto text-balance">
-                Windows, Office, Server, Visio y Project — 100% originales. Desde <strong>$1.50 USDT</strong> por unidad, con descuentos por volumen hasta el 77%. El Bot CID Fetcher activa todo por ti, sin llamar a Microsoft.
+                Windows, Office, Server, Visio y Project — 100% originales. Desde <strong>$2.50 USDT</strong> por unidad, con descuentos por volumen hasta el 80%. El Bot CID Fetcher activa todo por ti, sin llamar a Microsoft.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link href="/licencias">
@@ -93,7 +97,8 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <section className="py-16 bg-muted/40">
+      <section className="py-16 bg-muted/40 relative overflow-hidden">
+        <div className="absolute -left-32 top-1/2 -translate-y-1/2 w-72 h-72 rounded-full bg-primary/10 blur-3xl pointer-events-none" />
         <div className="container mx-auto px-4">
           <FadeIn>
             <div className="text-center mb-10">
@@ -144,7 +149,7 @@ export default async function HomePage() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
               {steps.map((step, i) => (
                 <div key={step.title} className="text-center p-6">
-                  <div className="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center mx-auto mb-4">
+                  <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center mx-auto mb-4">
                     <step.icon className="h-7 w-7 text-primary" />
                   </div>
                   <div className="w-8 h-8 rounded-full bg-primary text-primary-foreground text-sm font-bold flex items-center justify-center mx-auto mb-3">
@@ -172,8 +177,8 @@ export default async function HomePage() {
                 { icon: HeadphonesIcon, title: "Soporte Real 24/7", desc: "Una persona real en Telegram, no un bot de respuestas. Respondemos en menos de 1 hora." },
                 { icon: Bot, title: "Bot CID Fetcher Gratis", desc: "Activa en segundos sin llamar a Microsoft. Incluido sin costo con compras de 30+ unidades." },
               ].map((item) => (
-                <div key={item.title} className="relative p-5 md:p-6 rounded-xl border bg-card shadow-sm">
-                  <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
+                <div key={item.title} className="relative p-5 md:p-6 rounded-xl border bg-card shadow-sm hover:shadow-md transition-all duration-200 hover:bg-gradient-to-br hover:from-primary/5 hover:to-transparent">
+                  <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center mb-4">
                     <item.icon className="h-5 w-5 text-primary" />
                   </div>
                   <h3 className="font-semibold mb-1">{item.title}</h3>
@@ -229,76 +234,6 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <section className="py-16 bg-muted/40">
-        <div className="container mx-auto px-4">
-          <FadeIn delay={200}>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
-              {[
-                { icon: Users, value: "500+", label: "Revendedores Activos" },
-                { icon: CheckCircle, value: "1,000+", label: "Licencias Entregadas" },
-                { icon: Clock, value: "5+", label: "Años de Experiencia" },
-                { icon: Headphones, value: "7 días", label: "Garantía de Devolución" },
-              ].map((stat) => (
-                <FadeIn key={stat.label} delay={200}>
-                  <div className="text-center p-6 md:p-8 rounded-xl border bg-card shadow-sm">
-                    <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
-                      <stat.icon className="h-6 w-6 text-primary" />
-                    </div>
-                    <div className="text-3xl md:text-4xl font-bold text-primary mb-1">{stat.value}</div>
-                    <div className="text-sm text-muted-foreground/80">{stat.label}</div>
-                  </div>
-                </FadeIn>
-              ))}
-            </div>
-          </FadeIn>
-        </div>
-      </section>
-
-      <section className="py-16 bg-muted/30">
-        <div className="container mx-auto px-4">
-          <FadeIn delay={200}>
-            <div className="text-center mb-10">
-              <h2 className="text-2xl md:text-3xl font-bold mb-2">Lo que dicen quienes ya compran aquí</h2>
-              <p className="text-muted-foreground max-w-xl mx-auto">
-                Revendedores y técnicos que usan CID Fetcher a diario
-              </p>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
-              {[
-                {
-                  name: "Carlos M.",
-                  role: "Revendedor mayorista",
-                  text: "Compré 50 licencias y el Bot CID Fetcher me ha ahorrado horas de trabajo. La activación es instantánea, mis clientes reciben su licencia en minutos. Muy recomendados.",
-                },
-                {
-                  name: "Laura G.",
-                  role: "Técnico en sistemas",
-                  text: "Excelente servicio. Compré Office 2021 Pro Plus y Windows 11 Pro para varios clientes. Todo funcionó perfecto, la entrega fue inmediata por Telegram. Seguiré comprando.",
-                },
-                {
-                  name: "Roberto A.",
-                  role: "Dueño de cibercafé",
-                  text: "Necesitaba licencias para 15 equipos. Me ayudaron con la activación una por una por Telegram. Muy paciente el soporte. Precios justos, volveré por más.",
-                },
-              ].map((t) => (
-                <div key={t.name} className="p-6 rounded-xl border bg-card shadow-sm">
-                  <div className="flex items-center gap-4 mb-4">
-                    <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-sm font-bold text-primary shrink-0">
-                      {t.name.charAt(0)}
-                    </div>
-                    <div>
-                      <p className="text-sm font-semibold">{t.name}</p>
-                      <p className="text-xs text-muted-foreground">{t.role}</p>
-                    </div>
-                  </div>
-                  <p className="text-sm text-muted-foreground leading-relaxed">&ldquo;{t.text}&rdquo;</p>
-                </div>
-              ))}
-            </div>
-          </FadeIn>
-        </div>
-      </section>
-
       <section className="py-16">
         <div className="container mx-auto px-4">
           <FadeIn delay={300}>
@@ -332,30 +267,47 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <section className="py-20 bg-muted/40">
-        <div className="container mx-auto px-4">
+      <section className="py-20 relative overflow-hidden bg-muted/30">
+        <div className="absolute inset-0 bg-dot opacity-[0.05]" />
+        <div className="absolute inset-0 bg-glow-top opacity-60" />
+        <div className="absolute -bottom-16 -right-16 w-80 h-80 rounded-full bg-primary/10 blur-3xl pointer-events-none" />
+        <div className="container mx-auto px-4 relative z-10">
           <FadeIn delay={300}>
-            <div className="max-w-2xl mx-auto text-center">
-              <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center mx-auto mb-6">
-                <Bot className="h-8 w-8 text-primary" />
+            <div className="max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+              <div className="text-center lg:text-left">
+                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center mx-auto lg:mx-0 mb-6">
+                  <Bot className="h-8 w-8 text-primary" />
+                </div>
+                <h2 className="text-3xl md:text-4xl font-bold mb-4">El bot que activa por ti — gratis con tu compra</h2>
+                <p className="text-lg text-muted-foreground mb-8 max-w-xl mx-auto lg:mx-0">
+                  Olvídate de llamar a Microsoft. Con compras de 30+ unidades, el Bot CID Fetcher activa tus licencias al instante — sin costo adicional, sin límite de activaciones.
+                </p>
+                <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                  <Link href="/bot-cid-fetcher">
+                    <Button size="lg" className="gap-2 text-base px-8 shadow-lg shadow-primary/20">
+                      <Bot className="h-5 w-5" />
+                      Ver cómo funciona el Bot
+                    </Button>
+                  </Link>
+                  <Link href="/licencias">
+                    <Button size="lg" variant="outline" className="gap-2 text-base px-8">
+                      <Download className="h-5 w-5" />
+                      Ver licencias disponibles
+                    </Button>
+                  </Link>
+                </div>
               </div>
-              <h2 className="text-3xl md:text-4xl font-bold mb-4">El bot que activa por ti — gratis con tu compra</h2>
-              <p className="text-lg text-muted-foreground mb-8 max-w-xl mx-auto">
-                Olvídate de llamar a Microsoft. Con compras de 30+ unidades, el Bot CID Fetcher activa tus licencias al instante — sin costo adicional, sin límite de activaciones.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Link href="/bot-cid-fetcher">
-                  <Button size="lg" className="gap-2 text-base px-8 shadow-lg shadow-primary/20">
-                    <Bot className="h-5 w-5" />
-                    Ver cómo funciona el Bot
-                  </Button>
-                </Link>
-                <Link href="/licencias">
-                  <Button size="lg" variant="outline" className="gap-2 text-base px-8">
-                    <Download className="h-5 w-5" />
-                    Ver licencias disponibles
-                  </Button>
-                </Link>
+              <div className="flex justify-center lg:justify-end">
+                <div className="relative w-64 sm:w-72">
+                  <div className="absolute inset-0 bg-primary/10 blur-2xl rounded-full scale-110" />
+                  <Image
+                    src="/cid-fetcher-telegram.png"
+                    alt="Demo del Bot CID Fetcher activando una licencia en Telegram"
+                    width={320}
+                    height={600}
+                    className="relative rounded-3xl shadow-2xl w-full h-auto"
+                  />
+                </div>
               </div>
             </div>
           </FadeIn>

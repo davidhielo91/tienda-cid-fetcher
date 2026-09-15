@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import { getProductsByCategory, getCategoryLabel } from "@/lib/data";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -24,7 +24,8 @@ const categoryKeys = ["windows", "office", "windows_server", "visio", "project"]
 
 export function LicenciasClient() {
   const pathname = usePathname();
-  const [searchQuery, setSearchQuery] = useState("");
+  const searchParams = useSearchParams();
+  const [searchQuery, setSearchQuery] = useState(searchParams.get("q") ?? "");
   const allProducts = useMemo(() => getProductsByCategory(), []);
 
   const filtered = useMemo(() => {
@@ -123,7 +124,7 @@ export function LicenciasClient() {
             <div className="pt-4 border-t">
               <div className="rounded-lg bg-muted/50 p-3">
                 <p className="text-xs font-medium mb-1">Precio base</p>
-                <p className="text-sm font-bold">$1.50 USDT</p>
+                <p className="text-sm font-bold">$2.50 USDT</p>
                 <p className="text-[10px] text-muted-foreground mt-1 leading-relaxed">
                   Descuentos desde 30 unidades. Bot CID Fetcher gratis incluido.
                 </p>

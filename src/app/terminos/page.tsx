@@ -5,6 +5,9 @@ import { telegramUrl } from "@/lib/telegram";
 export const metadata: Metadata = {
   title: "Términos y Condiciones - Tienda CID Fetcher",
   description: "Términos y condiciones de compra, política de privacidad y garantía de 7 días para licencias de software Microsoft originales. Información sobre pagos, entregas y devoluciones.",
+  alternates: {
+    canonical: "https://cidfetcher.de/terminos",
+  },
 };
 
 export default function TerminosPage() {
