@@ -1,0 +1,12 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "tienda-cid-fetcher",
+  "account_id": "4f8eee0a683eb5f49779b3d74061cc65",
+  "main": "src/worker.ts",
+  "compatibility_date": "2026-09-14",
+  "assets": {
+    "directory": "./out",
+    "binding": "ASSETS",
+    "run_worker_first": true
+  }
+}

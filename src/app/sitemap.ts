@@ -1,6 +1,8 @@
 import type { MetadataRoute } from "next";
 import { products } from "@/lib/data";
 
+export const dynamic = "force-static";
+
 const BASE_URL = "https://cidfetcher.de";
 
 const LAST_MODIFIED = new Date("2026-06-16");
