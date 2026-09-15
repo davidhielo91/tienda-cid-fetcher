@@ -1,4 +1,4 @@
-import { BASE_PRICE_USDT, PRICE_TIERS, getPriceForQuantity } from "./pricing";
+import { BASE_PRICE_USDT } from "./pricing";
 
 export type ProductData = {
   id: string;
